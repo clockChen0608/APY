@@ -74,7 +74,7 @@ def process_prompts():
             cursor.execute("SELECT p.trained_result, d.value as description FROM prompts p JOIN descriptions d ON p.cve_id = d.cve_id WHERE p.id = %s", (prompt_id,))
             result = cursor.fetchone()
             content = f"請您實際的使用\n1.修補方法: {result['trained_result']} 來修補\n2.漏洞: {result['description']} 確認實作修補策略是否可修補這個漏洞\n3.只需要回答是或否即可。"
-            response = client.chat.completions.create(model="gpt-4-turbo", messages=[{"role": "user", "content": content}])
+            response = client.chat.completions.create(model="gpt-4", messages=[{"role": "user", "content": content}])
             decision = clean_text(response.choices[0].message.content)
             print(decision)
             update_field(connection, prompt_id, field_name, decision)
